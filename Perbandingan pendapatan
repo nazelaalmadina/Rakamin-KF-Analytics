@@ -1,0 +1,16 @@
+CREATE VIEW
+    kimia_farma.view_perbandinganPendapatan AS --Membuat tabel view 
+WITH pendapatan_tahunan AS (
+    SELECT 
+        EXTRACT(YEAR FROM ft.date) AS tahun, --Mengambil angka tahun dari kolom tanggal
+        SUM(ft.price * (1 - ft.discount_percentage / 100)) AS total_pendapatan --Menghitung jumlah omset
+    FROM `kimia_farma.kf_final_transaction` AS ft
+    GROUP BY 1 --Grouping based on kolom 1 yaitu tahun
+)
+SELECT 
+    tahun,
+    total_pendapatan,
+    LAG(total_pendapatan) OVER (ORDER BY tahun) AS pendapatan_tahun_lalu, --Mengambil nilai pendapatan dari baris tahun sebelumnya
+    ROUND((total_pendapatan - LAG(total_pendapatan) OVER (ORDER BY tahun)) / --Menghitung selisih / pertumbuhan pendapatan
+    NULLIF(LAG(total_pendapatan) OVER (ORDER BY tahun), 0) * 100, 2) AS persentase_pertumbuhan --Rumus (Baru-Lama)/Lama * 100%
+FROM pendapatan_tahunan
