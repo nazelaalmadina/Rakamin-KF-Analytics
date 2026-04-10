@@ -1,0 +1,18 @@
+CREATE VIEW
+    kimia_farma.view_top5Cabang AS --Membuat tabel hasil
+SELECT 
+    kc.branch_name,
+    kc.kota,
+    kc.rating AS rating_cabang,
+    AVG(ft.rating) AS rata_rata_rating_transaksi --Menghitung nilai rata-rata rating dari pembeli
+FROM 
+    `kimia_farma.kf_kantor_cabang` AS kc
+JOIN 
+    `kimia_farma.kf_final_transaction` AS ft 
+    ON kc.branch_id = ft.branch_id --Menghubungkan tabel kantor cabang dengan transaksi berdasarkan branch id
+GROUP BY 
+    1, 2, 3 --Grouping based on kolom 1, 2, 3
+ORDER BY 
+    rating_cabang DESC, --Sorting based on rating cabang tertinggi
+    rata_rata_rating_transaksi ASC --Sorting based on rating transaksi terrendah
+LIMIT 5 --Tampilkan hanya 5 data teratas
