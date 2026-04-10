@@ -1,0 +1,13 @@
+CREATE VIEW
+    kimia_farma.view_top10Customer AS --Membuat tabel hasil
+SELECT 
+    customer_name,
+    COUNT(transaction_id) AS frekuensi_belanja, --Menghitung berapa kali pelanggan datang
+    SUM(price * (1 - discount_percentage / 100)) AS total_belanja --Menghitung total belanja pelanggan
+FROM 
+    `kimia_farma.kf_final_transaction`
+GROUP BY 
+    1
+ORDER BY 
+    frekuensi_belanja DESC --Sorting based on frekuensi belanja terbanyak
+LIMIT 10 ----Tampilkan hanya 10 data teratas
