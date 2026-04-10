@@ -1,0 +1,17 @@
+CREATE VIEW
+    kimia_farma.view_top5StokInventory AS --Membuat tabel hasil
+SELECT 
+    kc.branch_name,
+    p.product_name,
+    i.opname_stock
+FROM 
+    `kimia_farma.kf_inventory` AS i
+JOIN 
+    `kimia_farma.kf_kantor_cabang` AS kc 
+    ON i.branch_id = kc.branch_id --Menghubungkan tabel inventory dengan kantor cabang berdasarkan branch id
+JOIN 
+    `kimia_farma.kf_product` AS p 
+    ON i.product_id = p.product_id --Menghubungkan tabel inventory dengan product berdasarkan product id
+ORDER BY 
+    i.opname_stock ASC --Sorting based on stok opname terdikit
+LIMIT 3 --Tampilkan hanya 5 data teratas
