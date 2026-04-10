@@ -1,0 +1,15 @@
+CREATE VIEW
+    kimia_farma.view_totalTransaksi AS --Membuat tabel hasil
+SELECT 
+    kc.provinsi,
+    COUNT(ft.transaction_id) AS total_transaksi --Menghitung jumlah transaksi sebagai total_transaksi
+FROM 
+    `kimia_farma.kf_final_transaction` AS ft
+JOIN 
+    `kimia_farma.kf_kantor_cabang` AS kc 
+    ON ft.branch_id = kc.branch_id --Menghubungkan tabel transaksi dengan lokasi cabang berdasarkan branch id
+GROUP BY 
+    1 --Grouping based on kolom pertama yaitu provinsi
+ORDER BY 
+    total_transaksi DESC --Sorting based on total transaksi terbesar
+LIMIT 10 --Tampilkan hanya 10 data teratas
