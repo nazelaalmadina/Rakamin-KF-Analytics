@@ -1,0 +1,15 @@
+CREATE VIEW
+    kimia_farma.view_totalNettSales AS --Membuat tabel hasil
+SELECT 
+    kc.provinsi,
+    SUM(ft.price * (1 - ft.discount_percentage / 100)) AS total_nett_sales --Menghitung harga setelah diskon
+FROM 
+    `kimia_farma.kf_final_transaction` AS ft
+JOIN 
+    `kimia_farma.kf_kantor_cabang` AS kc 
+    ON ft.branch_id = kc.branch_id
+GROUP BY 
+    1 --Grouping based on kolom pertama yaitu provinsi
+ORDER BY 
+    total_nett_sales DESC --Sorting based on total nett sales terbesar
+LIMIT 10 --Tampilkan hanya 10 data teratas
